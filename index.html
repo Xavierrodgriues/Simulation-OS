@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main>
+        <div class="screen_container">
+            <div class="main_screen_part">
+                <div id="desktop" style="position: relative; height: 94vh;"></div>
+
+            </div>
+
+
+            <!-- TASKBAR UI -->
+            <div class="taskbar_part">
+                <div class="taskbar_container">
+                    <div>&nbsp;</div>
+                    <div class="taskbar_items_list">
+                        <ul class="taskbar_items">
+                            <li><img class="window-icon" src="./assets/window_icon.png" alt=""></li>
+                            <li>
+                                <input class="taskbar_searchbar" type="search" name="search" placeholder="🔍 Search"
+                                    id="">
+                            </li>
+                            <li class="featured-icons">
+                                <div id="taskbar-item-1" class="taskbar-item">
+                                    <div class="glass-wrapper">
+                                        <img class="mini-icon" src="./assets/google-icon.png" id="google-icon" />
+                                    </div>
+                                    <div class="tooltip">Google</div>
+                                </div>
+
+                                <div id="taskbar-item-2" class="taskbar-item">
+                                    <div class="glass-wrapper">
+                                        <img class="mini-icon" src="./assets/vscode.png" id="vscode-icon" />
+                                    </div>
+                                    <div class="tooltip">VS Code</div>
+                                </div>
+
+                                <div id="taskbar-item-3" class="taskbar-item">
+                                    <div class="glass-wrapper">
+                                        <img class="mini-icon" src="./assets/telegram.png" id="telegram-icon" />
+                                    </div>
+                                    <div class="tooltip">Telegram</div>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="taskbar_items_list_3">
+                        <div style="text-align: center;">
+                            <p>ENG</p>
+                            <p>IN</p>
+                        </div>
+                        <div class="taskbar_date_time">
+                            <ul>
+                                <li>
+                                    <img class="icons wifi" src="./assets/wifi-signal.png" alt="">
+                                </li>
+                                <li>
+                                    <img class="icons audio" src="./assets/audio-svgrepo-com.png" alt="">
+                                </li>
+                                <li>
+                                    <img class="icons battery" src="./assets/battery-full-svgrepo-com.svg" alt="">
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p id="time" class="time" style="text-align: right;"></p>
+                            <p id="date"></p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
