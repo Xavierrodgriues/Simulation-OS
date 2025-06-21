@@ -29,21 +29,21 @@
                                     id="">
                             </li>
                             <li class="featured-icons">
-                                <div id="taskbar-item-1" class="taskbar-item">
+                                <div id="taskbar-item-1" data-app="google" class="taskbar-item">
                                     <div class="glass-wrapper">
                                         <img class="mini-icon" src="./assets/google-icon.png" id="google-icon" />
                                     </div>
                                     <div class="tooltip">Google</div>
                                 </div>
 
-                                <div id="taskbar-item-2" class="taskbar-item">
+                                <div id="taskbar-item-2" data-app="vscode" class="taskbar-item">
                                     <div class="glass-wrapper">
                                         <img class="mini-icon" src="./assets/vscode.png" id="vscode-icon" />
                                     </div>
                                     <div class="tooltip">VS Code</div>
                                 </div>
 
-                                <div id="taskbar-item-3" class="taskbar-item">
+                                <div id="taskbar-item-3" data-app="telegram" class="taskbar-item">
                                     <div class="glass-wrapper">
                                         <img class="mini-icon" src="./assets/telegram.png" id="telegram-icon" />
                                     </div>
@@ -58,7 +58,7 @@
                             <p>ENG</p>
                             <p>IN</p>
                         </div>
-                        <div class="taskbar_date_time">
+                        <div id="quick-settings-trigger" class="taskbar_date_time">
                             <ul>
                                 <li>
                                     <img class="icons wifi" src="./assets/wifi-signal.png" alt="">
@@ -71,7 +71,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div>
+                        <div class="taskbar_date_time" id="clock-box">
                             <p id="time" class="time" style="text-align: right;"></p>
                             <p id="date"></p>
                         </div>
@@ -81,6 +81,90 @@
             </div>
         </div>
     </main>
+
+
+    <!-- Calendar + Notification Wrapper -->
+    <div id="calendar-notification-wrapper">
+        <div id="notification-box">
+            <p>No Notifications</p>
+        </div>
+
+        <div id="calendar-widget">
+            <div class="calendar-header">
+                <button id="prev-month">◀</button>
+                <span id="calendar-month-year">Month Year</span>
+                <button id="next-month">▶</button>
+            </div>
+            <table class="calendar-table" id="calendar-table"></table>
+        </div>
+    </div>
+
+    <div id="quick-settings-panel" class="quick-settings-hidden">
+        <div class="qs-toggles">
+            <div class="qs-tile" data-type="wifi">
+                <div class="qs-icon">
+                    <img src="./assets/wifi-signal.png" alt="WiFi" />
+                </div>
+                <span>Wi-Fi</span>
+            </div>
+
+            <div class="qs-tile" data-type="bluetooth">
+                <div class="qs-icon">
+                    <img src="./assets/bluetooth-on-svgrepo-com.svg" alt="Bluetooth" />
+                </div>
+                <span>Bluetooth</span>
+            </div>
+
+            <div class="qs-tile" data-type="airplane">
+                <div class="qs-icon">
+                    <img src="./assets/airplane-mode-svgrepo-com.svg" alt="Airplane Mode" />
+                </div>
+                <span>Airplane</span>
+            </div>
+
+            <div class="qs-tile" data-type="accessibility">
+                <div class="qs-icon">
+                    <img src="./assets/accessibility-outline-svgrepo-com.svg" alt="Accessibility" />
+                </div>
+                <span>Accessibility</span>
+            </div>
+
+            <div class="qs-tile" data-type="energy">
+                <div class="qs-icon">
+                    <img src="./assets/battery-saver-svgrepo-com.svg" alt="Energy Saver" />
+                </div>
+                <span>Energy Saver</span>
+            </div>
+
+            <div class="qs-tile" data-type="night-light">
+                <div class="qs-icon">
+                    <img src="./assets/night-light-svgrepo-com.svg" alt="Night Light" />
+                </div>
+                <span>Night Light</span>
+            </div>
+        </div>
+
+
+        <div class="qs-sliders">
+            <div class="slider-box">
+                <img src="./assets/audio-svgrepo-com.png" alt="Volume" class="slider-icon" />
+                <input type="range" id="volume" min="0" max="100" value="50" />
+            </div>
+
+            <div class="slider-box">
+                <img src="./assets/sun-svgrepo-com.svg" alt="Brightness" id="brightness" class="slider-icon" />
+                <input type="range" id="brightness-ctrl" min="30" max="150" value="100"  />
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 45px;">
+            <div style="display: flex; align-items: center; gap: 5px;"><img src="./assets/battery-full-svgrepo-com.svg" class="slider-icon" alt=""><p>100%</p></div>
+            <div><img src="./assets/settings-svgrepo-com.svg" class="slider-icon" alt=""></div>
+        </div>
+
+    </div>
+
+
 
 
 
