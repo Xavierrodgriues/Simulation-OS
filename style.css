@@ -68,8 +68,8 @@ body {
 .window-content {
   flex-grow: 1;
   padding: 16px;
-  /* overflow: auto; */
-  overflow-y: hidden;
+  overflow: auto;
+  /* overflow-y: hidden; */
   height: 100%;
   background-color: #3b3b3b;
   color: white;

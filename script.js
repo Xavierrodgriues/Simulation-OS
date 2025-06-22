@@ -434,6 +434,7 @@ apps.forEach((app) => {
     taskbarItem?.classList.add("active");
 
     if (app.appName === "google") {
+      document.querySelector(".window-content").style.backgroundColor = "white"
       const win = document.querySelector(`.window[data-app='google']`);
       const tabBar = win.querySelector(".tab-bar");
       const tabContents = win.querySelector(".tab-contents");
