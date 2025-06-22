@@ -12,7 +12,18 @@
     <main>
         <div class="screen_container">
             <div class="main_screen_part">
-                <div id="desktop" style="position: relative; height: 94vh;"></div>
+                <div id="desktop">
+                    <div class="desktop-icon" data-app="recycle-bin">
+                        <img src="./assets/recycle-bin.png" alt="Recycle Bin" />
+                        <div class="icon-label" contenteditable="false">Recycle Bin</div>
+                    </div>
+
+                    <div class="desktop-icon" data-app="my-computer">
+                        <img src="./assets/my-computer.png" alt="My Computer" />
+                        <div class="icon-label" contenteditable="false">My Computer</div>
+                    </div>
+
+                </div>
 
             </div>
 
@@ -153,12 +164,15 @@
 
             <div class="slider-box">
                 <img src="./assets/sun-svgrepo-com.svg" alt="Brightness" id="brightness" class="slider-icon" />
-                <input type="range" id="brightness-ctrl" min="30" max="150" value="100"  />
+                <input type="range" id="brightness-ctrl" min="30" max="150" value="100" />
             </div>
         </div>
 
         <div style="display: flex; justify-content: space-between; margin-top: 45px;">
-            <div style="display: flex; align-items: center; gap: 5px;"><img src="./assets/battery-full-svgrepo-com.svg" class="slider-icon" alt=""><p>100%</p></div>
+            <div style="display: flex; align-items: center; gap: 5px;"><img src="./assets/battery-full-svgrepo-com.svg"
+                    class="slider-icon" alt="">
+                <p>100%</p>
+            </div>
             <div><img src="./assets/settings-svgrepo-com.svg" class="slider-icon" alt=""></div>
         </div>
 
@@ -168,7 +182,7 @@
 
 
 
-
+    <!-- <script async src="https://cse.google.com/cse.js?cx=f235d173b09934b7f"></script> -->
     <script src="script.js"></script>
 </body>
 

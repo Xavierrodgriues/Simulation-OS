@@ -65,11 +65,11 @@ body {
   border-radius: 10px;
 }
 
-
 .window-content {
   flex-grow: 1;
   padding: 16px;
-  overflow: auto;
+  /* overflow: auto; */
+  overflow-y: hidden;
   height: 100%;
   background-color: #3b3b3b;
   color: white;
@@ -200,7 +200,7 @@ body {
   margin-right: 15px;
 }
 
-.taskbar_items_list_3:hover{
+.taskbar_items_list_3:hover {
   cursor: default;
 }
 
@@ -438,7 +438,6 @@ body {
   transition: background 0.2s ease-in-out;
 }
 
-
 .slider-box input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -449,10 +448,291 @@ body {
   cursor: pointer;
 }
 
-/* .slider-box input[type="range"]::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: white;
+/* Phase 3 - Draggable desktop icons , creating static icons  */
+
+#desktop {
+  position: relative;
+  /* width: 100%; */
+  height: 95vh;
+  overflow: hidden;
+}
+
+.desktop-icon {
+  position: absolute;
+  width: 80px;
+  text-align: center;
   cursor: pointer;
+  user-select: none;
+}
+
+.desktop-icon img {
+  width: 48px;
+  height: 48px;
+}
+
+.icon-label {
+  font-size: 13px;
+  color: white;
+  margin-top: 5px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.icon-label[contenteditable="true"] {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: white;
+}
+
+.window-layout {
+  display: flex;
+  height: 100%;
+}
+
+.sidebar {
+  width: 150px;
+  background: #222;
+  color: white;
+  padding: 10px;
+  border-right: 1px solid #444;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.main-content {
+  flex: 1;
+  padding: 10px;
+  background: white;
+  color: black;
+  overflow-y: auto;
+}
+
+.explorer-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: white;
+  background-color: #1e1e1e;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.explorer-toolbar {
+  padding: 10px;
+  background-color: #2d2d2d;
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid #444;
+}
+
+.toolbar-btn {
+  background: #3a3a3a;
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.toolbar-btn:hover {
+  background: #505050;
+}
+
+.explorer-body {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.explorer-sidebar {
+  width: 220px;
+  background: #2b2b2b;
+  border-right: 1px solid #444;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.explorer-sidebar ul {
+  list-style: none;
+  padding: 0;
+  font-size: 14px;
+}
+
+.explorer-sidebar li {
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.explorer-sidebar li:hover {
+  background-color: #404040;
+}
+
+.explorer-main {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background-color: #1e1e1e;
+}
+
+.explorer-main h4 {
+  color: #ccc;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.drive {
+  display: flex;
+  align-items: center;
+  background: #2a2a2a;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 10px;
+  max-width: 400px;
+  gap: 15px;
+}
+
+.drive-icon {
+  font-size: 30px;
+}
+
+.drive-info {
+  flex: 1;
+}
+
+.drive-name {
+  color: white;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.drive-bar {
+  background: #555;
+  height: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.drive-bar-used {
+  background: #3399ff;
+  height: 100%;
+  width: 70%; /* dynamically update if needed */
+}
+
+.recycle-bar-used {
+  background: #3399ff;
+  height: 100%;
+  width: 70%; /* dynamically update if needed */
+}
+
+.drive-space {
+  font-size: 12px;
+  color: #bbb;
+}
+
+/* .tab-bar {
+  display: flex;
+  gap: 4px;
+  padding: 5px;
+  background-color: #e0e0e0;
+  border-bottom: 1px solid #ccc;
 } */
+
+
+/* .tab-btn, */
+.add-tab {
+  padding: 5px 10px;
+  background-color: #ddd;
+  border: none;
+  cursor: pointer;
+}
+
+/* .tab-btn.active {
+  background-color: white;
+  font-weight: bold;
+} */
+
+/* .tab-contents {
+  padding: 10px;
+  background-color: white;
+  height: 300px;
+  overflow: auto;
+  height: 80vh;
+} */
+
+
+/* .tab-content {
+  display: none;
+} */
+
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #eee;
+  border: 1px solid #ccc;
+  padding: 5px 8px;
+  border-radius: 4px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.tab-btn.active {
+  background-color: white;
+  border-bottom: 2px solid purple;
+}
+
+.tab-btn .tab-close {
+  background: none;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  color: #666;
+}
+
+.tab-btn > span{
+  color: black;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tab-bar {
+  display: flex;
+  background: #eee;
+  padding: 4px;
+  border-bottom: 1px solid #ccc;
+}
+
+.tab-contents {
+  flex: 1;
+  position: relative;
+  /* overflow: hidden; */
+}
+
+.tab-content {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+
+.tab-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
