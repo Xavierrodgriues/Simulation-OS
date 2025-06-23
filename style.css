@@ -78,7 +78,7 @@ body {
 .main_screen_part {
   width: 100%;
   height: 94vh;
-  background-image: url("./assets/11-0-Color-Day.jpg");
+  background-image: url("https://cdn.wallpaperhub.app/cloudcache/6/2/9/6/7/c/62967c2775f4dcae324e7d981e0a17d0629742b3.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -649,7 +649,6 @@ body {
   border-bottom: 1px solid #ccc;
 } */
 
-
 /* .tab-btn, */
 .add-tab {
   padding: 5px 10px;
@@ -671,11 +670,9 @@ body {
   height: 80vh;
 } */
 
-
 /* .tab-content {
   display: none;
 } */
-
 
 .tab-btn {
   display: inline-flex;
@@ -702,7 +699,7 @@ body {
   color: #666;
 }
 
-.tab-btn > span{
+.tab-btn > span {
   color: black;
 }
 
@@ -735,4 +732,40 @@ body {
   width: 100%;
   height: 100%;
   border: none;
+}
+
+/* Context menu */
+.context-menu {
+  position: absolute;
+  width: 200px;
+  /* background: #1e1e1e; */
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  color: white;
+  z-index: 10000;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  transform: scale(0.95);
+}
+
+.context-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 5px 0;
+}
+
+.context-menu li {
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.context-menu li:hover {
+  background-color: #3a3a3a;
+}
+
+.context-menu.hidden {
+  display: none;
+  transform: scale(1);
 }

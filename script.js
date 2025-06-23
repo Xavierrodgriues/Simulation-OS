@@ -1,3 +1,7 @@
+let cutClipboard = null;
+let clickedIcon = null;
+let currentExplorePath = "Desktop";
+
 const windowContentMap = {
   "recycle-bin": `
   <div class="explorer-container">
@@ -103,6 +107,8 @@ function getDesktopIconsHTML() {
 function setupExplorerSidebar(win, appName) {
   const mainPanel = win.querySelector(".explorer-main");
   const sidebarItems = win.querySelectorAll(".explorer-sidebar ul li");
+  win._mainPanel = mainPanel;
+  win.dataset.explorePanel = "true";
 
   const panelContent = {
     "⬇️ Downloads": "<h4>Downloads</h4><p>No downloads available.</p>",
@@ -140,11 +146,46 @@ function setupExplorerSidebar(win, appName) {
   sidebarItems.forEach((item) => {
     item.addEventListener("click", () => {
       const text = item.textContent.trim();
+      currentExplorePath = text;
+
+      const allIcons = JSON.parse(localStorage.getItem("desktopIcons")) || [];
+      const matchingIcons = allIcons.filter((icon) => icon.location === text);
+
       mainPanel.innerHTML =
-        panelContent[text] || `<h4>${text}</h4><p>No content to display.</p>`;
+        matchingIcons.length === 0
+          ? panelContent[text] || `<h4>${text}</h4><p>No content to display.</p>`
+          : ""; // Skip dummy text if folders are present
+
+      mainPanel.dataset.folder = text;
+
+      // Render persisted matching icons
+      matchingIcons.forEach((iconData) => {
+        const icon = document.createElement("div");
+        icon.className = "desktop-icon";
+        icon.setAttribute("data-app", iconData.id);
+        icon.dataset.location = iconData.location;
+        icon.innerHTML = `
+          <img src="./assets/folder.png" />
+          <div class="icon-label">${iconData.name}</div>
+        `;
+        icon.style.position = "static";
+        mainPanel.appendChild(icon);
+        makeIconDraggable(icon);
+        attachIconLogic(icon);
+      });
+
+      // Append deferred icons if any
+      const deferred = deferredExplorerIcons[text];
+      if (deferred && deferred.length) {
+        deferred.forEach((icon) => {
+          mainPanel.appendChild(icon);
+        });
+        deferredExplorerIcons[text] = [];
+      }
     });
   });
 }
+
 
 function updateDateTime() {
   const now = new Date();
@@ -198,6 +239,7 @@ function removeAllWindows(ele) {
     ele.remove();
   });
 }
+
 function setupDesktopClickToRemoveWindows() {
   document.getElementById("desktop").addEventListener("click", function (e) {
     // Only remove if clicked directly on the desktop (not a child element)
@@ -337,79 +379,6 @@ const apps = [
   },
 ];
 
-// let gcseScriptLoaded = false;
-// let retryCount = 0;
-// const maxRetries = 20;
-
-// apps.forEach((app) => {
-//   const icon = document.getElementById(app.id);
-//   const taskbarItem = document.getElementById(app.taskbarId);
-
-//   icon?.addEventListener("click", () => {
-//     zindex++;
-
-//     let existing = document.querySelector(`.window[data-app='${app.appName}']`);
-
-//     if (existing) {
-//       existing.style.display = "block";
-//       existing.style.zIndex = zindex;
-
-//       if (app.appName === "google" && window.google?.search?.cse) {
-//         document.querySelector(".window-content").style.backgroundColor =
-//           "white";
-//         google.search.cse.element.render({
-//           div: "google-search-container",
-//           tag: "search",
-//         });
-//       }
-//     } else {
-//       const win = createWindow(app.title, app.content);
-//       win.setAttribute("data-app", app.appName);
-//       win.style.zIndex = zindex;
-
-//       if (app.appName === "google") {
-//         document.querySelector(".window-content").style.backgroundColor =
-//           "white";
-//         const renderSearch = () => {
-//           const tryRender = () => {
-//             const container = document.getElementById(
-//               "google-search-container"
-//             );
-//             if (container && window.google?.search?.cse?.element?.render) {
-//               google.search.cse.element.render({
-//                 div: "google-search-container",
-//                 tag: "search",
-//               });
-//             } else if (retryCount < maxRetries) {
-//               // Retry after delay until container and API are ready
-//               retryCount++;
-//               setTimeout(tryRender, 100);
-//             } else {
-//               alert("Google search could not be rendered.");
-//             }
-//           };
-//           tryRender();
-//         };
-
-//         if (!gcseScriptLoaded) {
-//           const script = document.createElement("script");
-//           script.src = "https://cse.google.com/cse.js?cx=f235d173b09934b7f";
-//           script.async = true;
-//           script.onload = () => {
-//             gcseScriptLoaded = true;
-//             renderSearch();
-//           };
-//           document.body.appendChild(script);
-//         } else {
-//           renderSearch();
-//         }
-//       }
-//     }
-
-//     taskbarItem?.classList.add("active");
-//   });
-// });
-
 let gcseScriptLoaded = false;
 let googleTabCounter = 0;
 
@@ -434,7 +403,7 @@ apps.forEach((app) => {
     taskbarItem?.classList.add("active");
 
     if (app.appName === "google") {
-      document.querySelector(".window-content").style.backgroundColor = "white"
+      document.querySelector(".window-content").style.backgroundColor = "white";
       const win = document.querySelector(`.window[data-app='google']`);
       const tabBar = win.querySelector(".tab-bar");
       const tabContents = win.querySelector(".tab-contents");
@@ -496,6 +465,8 @@ apps.forEach((app) => {
                 "youtube.com",
                 "instagram.com",
                 "facebook.com",
+                "x.com",
+                "discord.com",
               ];
 
               if (
@@ -802,10 +773,10 @@ function isOverlapping(el1, el2) {
 }
 
 // Auto-position icons vertically (like Windows)
-const desktopIcons = document.querySelectorAll(".desktop-icon");
 const START_TOP = 20;
 const START_LEFT = 5;
 const ICON_SPACING = 100;
+const desktopIcons = document.querySelectorAll(".desktop-icon");
 
 const GRID_COLUMNS = Math.floor(window.innerHeight / ICON_SPACING);
 let occupiedGrid = new Set();
@@ -896,3 +867,384 @@ document.addEventListener("dblclick", function (e) {
     desktopIcon?.dispatchEvent(new Event("dblclick"));
   }
 });
+
+// Context Menu Feature
+
+const desktop = document.getElementById("desktop");
+const contextMenu = document.getElementById("context-menu");
+
+// Show custom context menu
+desktop.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+
+  console.log("Context menu triggered");
+  // Position within viewport
+  const menuWidth = 200;
+  const menuHeight = contextMenu.offsetHeight;
+  const windowWidth = window.innerWidth;
+  const windowHeight = window.innerHeight;
+
+  let posX = e.pageX;
+  let posY = e.pageY;
+
+  // Adjust if overflowing window
+  if (posX + menuWidth > windowWidth) posX = windowWidth - menuWidth;
+  if (posY + menuHeight > windowHeight) posY = windowHeight - menuHeight;
+
+  contextMenu.style.left = `${posX}px`;
+  contextMenu.style.top = `${posY}px`;
+  contextMenu.classList.remove("hidden");
+});
+
+// Hide on click anywhere else
+document.addEventListener("click", () => {
+  contextMenu.classList.add("hidden");
+});
+
+document.getElementById("refresh").addEventListener("click", () => {
+  location.reload();
+});
+
+let folderCounter = 1;
+
+document.getElementById("new-folder").addEventListener("click", () => {
+  contextMenu.classList.add("hidden");
+
+  const folderId = `folder-${Date.now()}`;
+  const folderName = `New Folder${
+    folderCounter > 1 ? " (" + folderCounter + ")" : ""
+  }`;
+  folderCounter++;
+
+  const MAX_COLS = Math.floor(window.innerWidth / ICON_SPACING);
+  let row = 0;
+  let col = 0;
+  let top, left;
+
+  while (true) {
+    top = START_TOP + row * ICON_SPACING;
+    left = START_LEFT + col * ICON_SPACING;
+    const key = `${left},${top}`;
+    if (!occupiedGrid.has(key)) {
+      occupiedGrid.add(key);
+      break;
+    }
+    row++;
+    if (row >= GRID_COLUMNS) {
+      row = 0;
+      col++;
+      if (col >= MAX_COLS) {
+        alert("No more space to add icons!");
+        return;
+      }
+    }
+  }
+
+  const folder = {
+    id: folderId,
+    name: folderName,
+    top: `${top}px`,
+    left: `${left}px`,
+  };
+
+  // Save to localStorage
+  const folders = JSON.parse(localStorage.getItem("desktopFolders")) || [];
+  folders.push(folder);
+  localStorage.setItem("desktopFolders", JSON.stringify(folders));
+
+  renderFolderIcon(folder);
+});
+
+function renderFolderIcon(folder) {
+  const icon = document.createElement("div");
+  icon.className = "desktop-icon";
+  icon.setAttribute("data-app", folder.id);
+  icon.style.position = "absolute";
+  icon.style.top = folder.top;
+  icon.style.left = folder.left;
+
+  icon.innerHTML = `
+    <img src="./assets/folder.png" />
+    <div class="icon-label">${folder.name}</div>
+  `;
+
+  document.getElementById("desktop").appendChild(icon);
+  makeIconDraggable(icon);
+
+  icon.addEventListener("dblclick", () => {
+    const existing = document.querySelector(`.window[data-app='${folder.id}']`);
+    zindex++;
+    if (existing) {
+      existing.style.display = "block";
+      existing.style.zIndex = zindex;
+    } else {
+      const win = createWindow(folder.name, `<p>This folder is empty.</p>`);
+      win.setAttribute("data-app", folder.id);
+      win.style.zIndex = zindex;
+
+      const taskbarList = document.querySelector(".featured-icons");
+      const taskbarItem = document.createElement("div");
+      taskbarItem.className = "taskbar-item active";
+      taskbarItem.setAttribute("data-app", folder.id);
+
+      taskbarItem.innerHTML = `
+        <div class="glass-wrapper">
+          <img class="mini-icon" src="./assets/folder.png" />
+        </div>
+        <div class="tooltip">${folder.name}</div>
+      `;
+      taskbarList.appendChild(taskbarItem);
+
+      taskbarItem.addEventListener("click", () => {
+        win.style.display = "block";
+        win.style.zIndex = ++zindex;
+      });
+
+      win.querySelector(".close").addEventListener("click", () => {
+        win.remove();
+        taskbarItem.remove();
+      });
+    }
+  });
+}
+
+function loadFoldersFromStorage() {
+  const folders = JSON.parse(localStorage.getItem("desktopFolders")) || [];
+  folders.forEach((folder) => {
+    occupiedGrid.add(`${parseInt(folder.left)},${parseInt(folder.top)}`);
+    renderFolderIcon(folder);
+  });
+}
+
+loadFoldersFromStorage();
+
+// Icons Context Menu
+
+const iconContextMenu = document.getElementById("icon-context-menu");
+
+document.addEventListener("contextmenu", function (e) {
+  const icon = e.target.closest(".desktop-icon");
+
+  if (icon) {
+    e.preventDefault();
+    clickedIcon = icon;
+
+    contextMenu.classList.add("hidden");
+    const menuWidth = 150;
+    const menuHeight = iconContextMenu.offsetHeight;
+    let posX = e.pageX;
+    let posY = e.pageY;
+
+    // Prevent overflow
+    if (posX + menuWidth > window.innerWidth)
+      posX = window.innerWidth - menuWidth;
+    if (posY + menuHeight > window.innerHeight)
+      posY = window.innerHeight - menuHeight;
+
+    iconContextMenu.style.left = `${posX}px`;
+    iconContextMenu.style.top = `${posY}px`;
+    iconContextMenu.classList.remove("hidden");
+  }
+});
+
+// Hide when clicking elsewhere
+document.addEventListener("click", () => {
+  iconContextMenu.classList.add("hidden");
+});
+
+
+
+//  Icons context menu options features
+
+document.getElementById("rename-icon").addEventListener("click", () => {
+  iconContextMenu.classList.add("hidden");
+  if (!clickedIcon) return;
+
+  const label = clickedIcon.querySelector(".icon-label");
+  const oldName = label.textContent;
+
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = oldName;
+  input.className = "rename-input";
+  input.style.width = "70px";
+  input.style.fontSize = "12px";
+
+  label.replaceWith(input);
+  input.focus();
+
+  input.addEventListener("blur", () => {
+    const newLabel = document.createElement("div");
+    newLabel.className = "icon-label";
+    newLabel.textContent = input.value || oldName;
+    input.replaceWith(newLabel);
+
+    // Update in localStorage
+    const appId = clickedIcon.getAttribute("data-app");
+    const folders = JSON.parse(localStorage.getItem("desktopFolders")) || [];
+    const folder = folders.find((f) => f.id === appId);
+    if (folder) {
+      folder.name = newLabel.textContent;
+      localStorage.setItem("desktopFolders", JSON.stringify(folders));
+    }
+  });
+});
+
+document.getElementById("delete-icon").addEventListener("click", () => {
+  iconContextMenu.classList.add("hidden");
+  if (!clickedIcon) return;
+
+  const appId = clickedIcon.getAttribute("data-app");
+  clickedIcon.remove();
+
+  // Remove from localStorage
+  let folders = JSON.parse(localStorage.getItem("desktopFolders")) || [];
+  folders = folders.filter((f) => f.id !== appId);
+  localStorage.setItem("desktopFolders", JSON.stringify(folders));
+});
+
+document.getElementById("cut-icon").addEventListener("click", () => {
+  iconContextMenu.classList.add("hidden");
+  if (!clickedIcon) return;
+
+  cutClipboard = clickedIcon;
+  clickedIcon.style.opacity = "0.5"; // visual feedback
+});
+
+
+function saveIconsToStorage() {
+  const allIcons = document.querySelectorAll(".desktop-icon");
+  const data = [];
+
+  allIcons.forEach((icon) => {
+    const id = icon.dataset.app;
+    const name = icon.querySelector(".icon-label").textContent;
+
+    const location =
+      icon.closest(".explorer-main")?.dataset?.folder || "Desktop";
+
+    let top = 0, left = 0;
+
+    // Only read top/left for desktop icons
+    if (location === "Desktop") {
+      top = parseInt(icon.style.top || 0);
+      left = parseInt(icon.style.left || 0);
+    }
+
+    data.push({ id, name, top, left, location });
+  });
+
+  localStorage.setItem("desktopIcons", JSON.stringify(data));
+}
+
+const deferredExplorerIcons = {}; // Temporary store for explorer folder icons
+
+function loadIconsFromStorage() {
+  const data = JSON.parse(localStorage.getItem("desktopIcons")) || [];
+
+  data.forEach((iconData) => {
+    const icon = document.createElement("div");
+    icon.className = "desktop-icon";
+    icon.setAttribute("data-app", iconData.id);
+    icon.innerHTML = `
+      <img src="./assets/folder.png" />
+      <div class="icon-label">${iconData.name}</div>
+    `;
+
+    makeIconDraggable(icon);
+    attachIconLogic(icon);
+
+    if (iconData.location === "Desktop") {
+      icon.style.position = "absolute";
+      icon.style.top = `${iconData.top}px`;
+      icon.style.left = `${iconData.left}px`;
+      document.getElementById("desktop").appendChild(icon);
+    } else {
+      icon.style.position = "static";
+      if (!deferredExplorerIcons[iconData.location]) {
+        deferredExplorerIcons[iconData.location] = [];
+      }
+      deferredExplorerIcons[iconData.location].push(icon);
+    }
+  });
+}
+
+document.getElementById("paste").addEventListener("click", () => {
+  contextMenu.classList.add("hidden");
+
+  if (!cutClipboard) return;
+
+  let targetContainer = document.getElementById("desktop");
+
+  // Check if explorer is open and user is in a folder
+  const explorerWindow = document.querySelector(
+    ".window[data-app='my-computer']"
+  );
+  if (
+    explorerWindow &&
+    !explorerWindow.classList.contains("hidden") &&
+    currentExplorePath !== "Desktop"
+  ) {
+    const explorerMainPanel = explorerWindow._mainPanel;
+    if (explorerMainPanel) {
+      targetContainer = explorerMainPanel;
+    }
+  }
+
+  // Remove from old container if needed
+  if (
+    cutClipboard.parentElement &&
+    cutClipboard.parentElement !== targetContainer
+  ) {
+    cutClipboard.parentElement.removeChild(cutClipboard);
+  }
+
+  if (targetContainer.id === "desktop") {
+    // Find next free spot on desktop grid
+    const MAX_COLS = Math.floor(window.innerWidth / ICON_SPACING);
+    let row = 0, col = 0, top, left;
+
+    while (true) {
+      top = START_TOP + row * ICON_SPACING;
+      left = START_LEFT + col * ICON_SPACING;
+      const key = `${left},${top}`;
+      if (!occupiedGrid.has(key)) {
+        occupiedGrid.add(key);
+        break;
+      }
+      row++;
+      if (row >= GRID_COLUMNS) {
+        row = 0;
+        col++;
+        if (col >= MAX_COLS) {
+          alert("No space to paste!");
+          return;
+        }
+      }
+    }
+
+    cutClipboard.dataset.location = "Desktop";
+    cutClipboard.style.top = `${top}px`;
+    cutClipboard.style.left = `${left}px`;
+    cutClipboard.style.position = "absolute";
+  } else {
+    // Inside explorer panel
+    cutClipboard.dataset.location = currentExplorePath;
+    cutClipboard.style.position = "static";
+    cutClipboard.style.top = "unset";
+    cutClipboard.style.left = "unset";
+
+    // ✅ Only remove dummy content if it's there
+    const dummyContent = targetContainer.querySelector("p");
+    if (dummyContent && dummyContent.textContent.includes("No")) {
+      dummyContent.remove();
+    }
+  }
+
+  targetContainer.appendChild(cutClipboard);
+  cutClipboard.style.opacity = "1";
+  cutClipboard = null;
+
+  saveIconsToStorage();
+});
+
