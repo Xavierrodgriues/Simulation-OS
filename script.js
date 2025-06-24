@@ -152,8 +152,7 @@ C:\\Users\\You>
       />
     </div>
   </div>
-`
-
+`,
 };
 
 function getDesktopIconsHTML() {
@@ -442,14 +441,111 @@ const apps = [
     id: "vscode-icon",
     taskbarId: "taskbar-item-2",
     title: "VS Code",
-    content: "<p>Welcome to VS Code</p>",
+    content: `
+  <div style="font-family: 'Segoe UI', sans-serif; height: 100vh; background-color: #1e1e1e; color: #d4d4d4; display: flex;">
+    
+    <!-- Sidebar -->
+    <div style="width: 50px; background-color: #333333; display: flex; flex-direction: column; align-items: center; padding-top: 10px;">
+      <div style="width: 30px; height: 30px; margin-bottom: 20px; background: url('https://img.icons8.com/ios-filled/50/ffffff/files.png') center/contain no-repeat;"></div>
+      <div style="width: 30px; height: 30px; margin-bottom: 20px; background: url('https://img.icons8.com/ios-filled/50/ffffff/search.png') center/contain no-repeat;"></div>
+      <div style="width: 30px; height: 30px; margin-bottom: 20px; background: url('https://img.icons8.com/ios-filled/50/ffffff/source-code.png') center/contain no-repeat;"></div>
+    </div>
+
+    <!-- Explorer + Editor -->
+    <div style="flex: 1; display: flex; flex-direction: column;">
+      
+      <!-- Top Bar -->
+      <div style="background-color: #2d2d2d; padding: 8px 16px; display: flex; align-items: center; border-bottom: 1px solid #444;">
+        <span style="color: #ccc;">📄 index.js</span>
+      </div>
+
+      <!-- Editor Area -->
+      <div style="flex: 1; padding: 16px; background-color: #1e1e1e; font-family: Consolas, monospace; overflow: auto;">
+        <pre style="margin: 0; line-height: 1.6;">
+<span style="color: #569cd6;">function</span> <span style="color: #dcdcaa;">helloWorld</span>() {
+  <span style="color: #d4d4d4;">console</span>.<span style="color: #9cdcfe;">log</span>(<span style="color: #ce9178;">"Hello, VS Code UI!"</span>);
+}
+        </pre>
+      </div>
+
+      <!-- Bottom Status Bar -->
+      <div style="background-color: #007acc; color: white; padding: 4px 12px; font-size: 12px;">
+        <span>Ln 1, Col 1    Spaces: 2    UTF-8    LF    JavaScript</span>
+      </div>
+    </div>
+  </div>
+  `,
     appName: "vscode",
   },
   {
     id: "telegram-icon",
     taskbarId: "taskbar-item-2",
     title: "Telegram",
-    content: "<p>Welcome to Telegram</p>",
+    content: `
+  <div style="display: flex; height: 100vh; font-family: 'Segoe UI', sans-serif; background-color: #17212b; color: white;">
+    
+    <!-- Sidebar -->
+    <div style="width: 300px; background-color: #202b38; display: flex; flex-direction: column; border-right: 1px solid #1c1c1c;">
+      
+      <!-- Profile Header -->
+      <div style="padding: 16px; border-bottom: 1px solid #1c1c1c; display: flex; align-items: center; gap: 10px;">
+        <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #2a3948;"></div>
+        <div>
+          <div style="font-weight: bold;">User Name</div>
+          <div style="font-size: 12px; color: #a0a0a0;">Online</div>
+        </div>
+      </div>
+      
+      <!-- Search -->
+      <div style="padding: 10px;">
+        <input type="text" placeholder="Search" style="width: 100%; padding: 8px 10px; border-radius: 6px; background-color: #2a3948; color: white; border: none; outline: none;" />
+      </div>
+
+      <!-- Chat List -->
+      <div style="flex: 1; overflow-y: auto;">
+        <div style="padding: 10px 16px; display: flex; gap: 12px; cursor: pointer; border-bottom: 1px solid #1c1c1c;">
+          <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #2a3948;"></div>
+          <div>
+            <div style="font-weight: bold;">Chat with John</div>
+            <div style="font-size: 13px; color: #a0a0a0;">Hey, how are you?</div>
+          </div>
+        </div>
+        <!-- Add more chats if you want -->
+      </div>
+    </div>
+
+    <!-- Chat Window -->
+    <div style="flex: 1; display: flex; flex-direction: column; background-color: #17212b;">
+
+      <!-- Chat Header -->
+      <div style="padding: 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #1c1c1c; background-color: #202b38;">
+        <div style="width: 40px; height: 40px; border-radius: 50%; background-color: #2a3948;"></div>
+        <div>
+          <div style="font-weight: bold;">John Doe</div>
+          <div style="font-size: 12px; color: #a0a0a0;">last seen recently</div>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div style="flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;">
+        <div style="align-self: flex-start; background-color: #2a3948; padding: 10px 14px; border-radius: 12px; max-width: 60%;">
+          Hi there!
+        </div>
+        <div style="align-self: flex-end; background-color: #4e9eff; padding: 10px 14px; border-radius: 12px; max-width: 60%; color: white;">
+          Hello! How are you?
+        </div>
+        <!-- Add more messages as needed -->
+      </div>
+
+      <!-- Input -->
+      <div style="padding: 10px 16px; background-color: #202b38; border-top: 1px solid #1c1c1c; display: flex; align-items: center; gap: 10px;">
+        <input type="text" placeholder="Write a message..." style="flex: 1; padding: 10px 14px; border-radius: 20px; background-color: #2a3948; border: none; color: white; outline: none;" />
+        <button style="background-color: #4e9eff; border: none; padding: 10px 16px; border-radius: 20px; color: white; cursor: pointer;">Send</button>
+      </div>
+
+    </div>
+  </div>
+  `,
     appName: "telegram",
   },
 ];
@@ -2421,41 +2517,6 @@ function setupCommandPrompt() {
 }
 
 function runCommand(command, outputElement) {
-  const lower = command.toLowerCase();
-
-  switch (true) {
-    case lower === "help":
-      outputElement.textContent += `Available commands:
-- help
-- clear
-- echo [message]
-- date
-- about
-`;
-      break;
-    case lower === "clear":
-      outputElement.textContent = `Microsoft Windows [Version 11.0.12345]
-(c) Microsoft Corporation. All rights reserved.
-
-Type "help" to view available commands.
-
-C:\\Users\\You>`;
-      break;
-    case lower === "date":
-      outputElement.textContent += `${new Date().toString()}\n`;
-      break;
-    case lower.startsWith("echo "):
-      outputElement.textContent += `${command.slice(5)}\n`;
-      break;
-    case lower === "about":
-      outputElement.textContent += `Simulated Windows CMD built with JavaScript.\n`;
-      break;
-    default:
-      outputElement.textContent += `'${command}' is not recognized as an internal or external command.\n`;
-  }
-}
-
-function runCommand(command, outputElement) {
   const lowerCmd = command.toLowerCase();
 
   if (lowerCmd === "help") {
@@ -2481,3 +2542,40 @@ function runCommand(command, outputElement) {
 }
 
 setTimeout(setupCommandPrompt, 100);
+
+function VSCodecontentHTML() {
+  return `
+  <div style="font-family: 'Segoe UI', sans-serif; height: 100vh; background-color: #1e1e1e; color: #d4d4d4; display: flex;">
+    
+    <!-- Sidebar -->
+    <div style="width: 50px; background-color: #333333; display: flex; flex-direction: column; align-items: center; padding-top: 10px;">
+      <div style="width: 30px; height: 30px; margin-bottom: 20px; background: url('https://img.icons8.com/ios-filled/50/ffffff/files.png') center/contain no-repeat;"></div>
+      <div style="width: 30px; height: 30px; margin-bottom: 20px; background: url('https://img.icons8.com/ios-filled/50/ffffff/search.png') center/contain no-repeat;"></div>
+      <div style="width: 30px; height: 30px; margin-bottom: 20px; background: url('https://img.icons8.com/ios-filled/50/ffffff/source-code.png') center/contain no-repeat;"></div>
+    </div>
+
+    <!-- Explorer + Editor -->
+    <div style="flex: 1; display: flex; flex-direction: column;">
+      
+      <!-- Top Bar -->
+      <div style="background-color: #2d2d2d; padding: 8px 16px; display: flex; align-items: center; border-bottom: 1px solid #444;">
+        <span style="color: #ccc;">📄 index.js</span>
+      </div>
+
+      <!-- Editor Area -->
+      <div style="flex: 1; padding: 16px; background-color: #1e1e1e; font-family: Consolas, monospace; overflow: auto;">
+        <pre style="margin: 0; line-height: 1.6;">
+<span style="color: #569cd6;">function</span> <span style="color: #dcdcaa;">helloWorld</span>() {
+  <span style="color: #d4d4d4;">console</span>.<span style="color: #9cdcfe;">log</span>(<span style="color: #ce9178;">"Hello, VS Code UI!"</span>);
+}
+        </pre>
+      </div>
+
+      <!-- Bottom Status Bar -->
+      <div style="background-color: #007acc; color: white; padding: 4px 12px; font-size: 12px;">
+        <span>Ln 1, Col 1    Spaces: 2    UTF-8    LF    JavaScript</span>
+      </div>
+    </div>
+  </div>
+  `;
+}
