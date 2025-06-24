@@ -153,7 +153,8 @@ function setupExplorerSidebar(win, appName) {
 
       mainPanel.innerHTML =
         matchingIcons.length === 0
-          ? panelContent[text] || `<h4>${text}</h4><p>No content to display.</p>`
+          ? panelContent[text] ||
+            `<h4>${text}</h4><p>No content to display.</p>`
           : ""; // Skip dummy text if folders are present
 
       mainPanel.dataset.folder = text;
@@ -185,7 +186,6 @@ function setupExplorerSidebar(win, appName) {
     });
   });
 }
-
 
 function updateDateTime() {
   const now = new Date();
@@ -901,10 +901,6 @@ document.addEventListener("click", () => {
   contextMenu.classList.add("hidden");
 });
 
-document.getElementById("refresh").addEventListener("click", () => {
-  location.reload();
-});
-
 let folderCounter = 1;
 
 document.getElementById("new-folder").addEventListener("click", () => {
@@ -988,9 +984,9 @@ function renderFolderIcon(folder) {
       taskbarItem.setAttribute("data-app", folder.id);
 
       taskbarItem.innerHTML = `
-        <div class="glass-wrapper">
-          <img class="mini-icon" src="./assets/folder.png" />
-        </div>
+      <div class="glass-wrapper">
+      <img class="mini-icon" src="./assets/folder.png" />
+      </div>
         <div class="tooltip">${folder.name}</div>
       `;
       taskbarList.appendChild(taskbarItem);
@@ -1017,6 +1013,10 @@ function loadFoldersFromStorage() {
 }
 
 loadFoldersFromStorage();
+
+document.getElementById("refresh").addEventListener("click", () => {
+  location.reload();
+});
 
 // Icons Context Menu
 
@@ -1051,8 +1051,6 @@ document.addEventListener("contextmenu", function (e) {
 document.addEventListener("click", () => {
   iconContextMenu.classList.add("hidden");
 });
-
-
 
 //  Icons context menu options features
 
@@ -1111,7 +1109,6 @@ document.getElementById("cut-icon").addEventListener("click", () => {
   clickedIcon.style.opacity = "0.5"; // visual feedback
 });
 
-
 function saveIconsToStorage() {
   const allIcons = document.querySelectorAll(".desktop-icon");
   const data = [];
@@ -1123,7 +1120,8 @@ function saveIconsToStorage() {
     const location =
       icon.closest(".explorer-main")?.dataset?.folder || "Desktop";
 
-    let top = 0, left = 0;
+    let top = 0,
+      left = 0;
 
     // Only read top/left for desktop icons
     if (location === "Desktop") {
@@ -1202,7 +1200,10 @@ document.getElementById("paste").addEventListener("click", () => {
   if (targetContainer.id === "desktop") {
     // Find next free spot on desktop grid
     const MAX_COLS = Math.floor(window.innerWidth / ICON_SPACING);
-    let row = 0, col = 0, top, left;
+    let row = 0,
+      col = 0,
+      top,
+      left;
 
     while (true) {
       top = START_TOP + row * ICON_SPACING;
@@ -1247,4 +1248,3 @@ document.getElementById("paste").addEventListener("click", () => {
 
   saveIconsToStorage();
 });
-
