@@ -79,6 +79,81 @@ const windowContentMap = {
     </div>
   </div>
 `,
+  notepad: `
+  <div style="display: flex; flex-direction: column; height: 100%; font-family: 'Segoe UI', sans-serif; background: white; color: black;">
+
+    <!-- Menu Bar -->
+    <div style="background-color: #f1f1f1; border-bottom: 1px solid #ccc; padding: 4px 8px; display: flex; font-size: 14px; position: relative;">
+      <div class="menu-item" style="position: relative; margin-right: 20px; cursor: pointer;">File
+        <div class="menu-dropdown" style="display: none; position: absolute; top: 100%; left: 0; z-index: 999;">
+          <div class="menu-option" onclick="notepadNew()">New</div>
+          <div class="menu-option" onclick="notepadOpen()">Open</div>
+          <div class="menu-option" onclick="notepadSave()">Save</div>
+        </div>
+      </div>
+      <div class="menu-item" style="position: relative; margin-right: 20px; cursor: pointer;">Edit
+        <div class="menu-dropdown" style="display: none; position: absolute; top: 100%; left: 0;">
+          <div class="menu-option" onclick="notepadCut()">Cut</div>
+          <div class="menu-option" onclick="notepadCopy()">Copy</div>
+          <div class="menu-option" onclick="notepadPaste()">Paste</div>
+          <div class="menu-option" onclick="notepadSelectAll()">Select All</div>
+        </div>
+      </div>
+      <div class="menu-item" style="position: relative; margin-right: 20px; cursor: pointer;">Format
+        <div class="menu-dropdown" style="display: none; position: absolute; top: 100%; left: 0;">
+          <div class="menu-option" onclick="notepadToggleWrap()"> Wrap</div>
+          <div class="menu-option" onclick="notepadFontSize()">Font Size</div>
+        </div>
+      </div>
+      <div class="menu-item" style="position: relative; margin-right: 20px; cursor: pointer;">View
+        <div class="menu-dropdown" style="display: none; position: absolute; top: 100%; left: 0;">
+          <div class="menu-option" onclick="notepadZoom(1)">Zoom In</div>
+          <div class="menu-option" onclick="notepadZoom(-1)">Zoom Out</div>
+          <div class="menu-option" onclick="notepadZoom(0)">Reset</div>
+        </div>
+      </div>
+      <div class="menu-item" style="position: relative; cursor: pointer;">Help
+        <div class="menu-dropdown" style="display: none; position: absolute; top: 100%; left: 0;">
+          <div class="menu-option" onclick="alert('This is a Notepad clone')">About</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Text Area -->
+    <textarea id="notepad-textarea" style="
+      flex: 1;
+      padding: 12px;
+      font-size: 15px;
+      border: none;
+      resize: none;
+      outline: none;
+      font-family: 'Consolas', monospace;
+      line-height: 1.5;
+      overflow: auto;
+    " placeholder="Type your notes here..."></textarea>
+  </div>`,
+  commandprompt: `
+  <div style="display: flex; flex-direction: column; height: 100%; background-color: black; font-family: Consolas, monospace; color: white; padding: 10px; box-sizing: border-box; font-size: 14px;">
+    <div id="cmd-output" style="flex: 1; overflow-y: auto; white-space: pre-wrap;">
+Microsoft Windows [Version 11.0.12345]
+(c) Microsoft Corporation. All rights reserved.
+
+Type "help" to view available commands.
+
+C:\\Users\\You>
+    </div>
+    <div style="display: flex; align-items: center;">
+      <span style="color: white;">C:\\Users\\You&gt; </span>
+      <input
+        id="cmd-input"
+        type="text"
+        style="flex: 1; background: black; color: white; border: none; outline: none; font-family: Consolas, monospace; font-size: 14px;"
+        autocomplete="off"
+      />
+    </div>
+  </div>
+`
+
 };
 
 function getDesktopIconsHTML() {
@@ -815,6 +890,10 @@ desktopIcons.forEach((icon) => {
       if (appName === "my-computer") {
         setupExplorerSidebar(win, appName);
       }
+
+      if (appName === "commandprompt") {
+        setupCommandPrompt();
+      }
       // 🔹 Dynamically create a taskbar icon for this app
       const taskbarList = document.querySelector(".featured-icons");
       const taskbarItem = document.createElement("div");
@@ -1248,3 +1327,1157 @@ document.getElementById("paste").addEventListener("click", () => {
 
   saveIconsToStorage();
 });
+
+// Change background;
+
+const background_Images = [
+  "default1.jpg",
+  "default2.webp",
+  "default3.webp",
+  "default4.webp",
+  "default5.webp",
+  "default6.jpg",
+];
+
+let image_counter = 0;
+
+const main_screen_part = document.querySelector(".main_screen_part");
+const personalize = document.querySelector("#personalize");
+
+personalize.addEventListener("click", () => {
+  main_screen_part.style.backgroundImage = `url(./assets/${background_Images[image_counter]})`;
+
+  if (image_counter < background_Images.length - 1) {
+    image_counter++;
+  } else {
+    image_counter = 0;
+  }
+});
+
+//  Display Settings UI
+function getSettings() {
+  return `<div style="
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #202020;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    ">
+      <div style="
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+      ">
+
+        <div style="
+          width: 400px;
+          background: #1e1e1e;
+          border-right: 1px solid #404040;
+          display: flex;
+          flex-direction: column;
+          overflow-y: auto;
+        ">
+          
+          <div style="
+            padding: 16px;
+            border-bottom: 1px solid #404040;
+          ">
+            <div style="
+              position: relative;
+              background: #2c2c2c;
+              border: 1px solid #404040;
+              border-radius: 4px;
+              display: flex;
+              align-items: center;
+              padding: 8px 12px;
+              transition: border-color 0.2s;
+            " onfocus="this.style.borderColor='#0078d4'" onblur="this.style.borderColor='#404040'">
+              <div style="
+                width: 16px;
+                height: 16px;
+                margin-right: 8px;
+                opacity: 0.6;
+                position: relative;
+              ">
+                <div style="
+                  width: 8px;
+                  height: 8px;
+                  border: 1.5px solid #ffffff;
+                  border-radius: 50%;
+                  position: absolute;
+                  top: 1px;
+                  left: 1px;
+                "></div>
+                <div style="
+                  width: 2px;
+                  height: 4px;
+                  background: #ffffff;
+                  position: absolute;
+                  bottom: 2px;
+                  right: 2px;
+                  transform: rotate(45deg);
+                "></div>
+              </div>
+              <input type="text" placeholder="Find a setting" style="
+                border: none;
+                outline: none;
+                flex: 1;
+                font-size: 14px;
+                font-family: inherit;
+                background: transparent;
+                color: #ffffff;
+              ">
+            </div>
+          </div>
+
+
+          <div style="flex: 1; padding: 8px 0;">
+            <div style="
+              padding: 12px 20px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              transition: background-color 0.1s;
+              background: #0078d4;
+              border-right: 3px solid #0078d4;
+            ">
+              <div style="
+                width: 20px;
+                height: 20px;
+                background: #ffffff;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div style="
+                  width: 12px;
+                  height: 12px;
+                  background: #0078d4;
+                  border-radius: 50%;
+                "></div>
+              </div>
+              <span style="font-size: 14px; font-weight: 500; color: #ffffff;">System</span>
+            </div>
+
+            <div style="
+              padding: 12px 20px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              transition: background-color 0.1s;
+            " onmouseover="this.style.background='#2c2c2c'" onmouseout="this.style.background='transparent'">
+              <div style="
+                width: 20px;
+                height: 20px;
+                background: #107c10;
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div style="
+                  width: 8px;
+                  height: 8px;
+                  border: 2px solid white;
+                  border-radius: 1px;
+                "></div>
+              </div>
+              <span style="font-size: 14px; color: #ffffff;">Bluetooth & devices</span>
+            </div>
+
+            <div style="
+              padding: 12px 20px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              transition: background-color 0.1s;
+            " onmouseover="this.style.background='#2c2c2c'" onmouseout="this.style.background='transparent'">
+              <div style="
+                width: 20px;
+                height: 20px;
+                background: #ff8c00;
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div style="
+                  width: 10px;
+                  height: 6px;
+                  border: 1px solid white;
+                  border-radius: 1px;
+                  position: relative;
+                ">
+                  <div style="
+                    position: absolute;
+                    top: -1px;
+                    right: -2px;
+                    width: 2px;
+                    height: 8px;
+                    background: white;
+                    border-radius: 1px;
+                  "></div>
+                </div>
+              </div>
+              <span style="font-size: 14px; color: #ffffff;">Network & internet</span>
+            </div>
+
+            <div style="
+              padding: 12px 20px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              transition: background-color 0.1s;
+            " onmouseover="this.style.background='#2c2c2c'" onmouseout="this.style.background='transparent'">
+              <div style="
+                width: 20px;
+                height: 20px;
+                background: #d83b01;
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div style="
+                  width: 12px;
+                  height: 8px;
+                  background: white;
+                  border-radius: 1px;
+                  position: relative;
+                ">
+                  <div style="
+                    position: absolute;
+                    bottom: -1px;
+                    left: 2px;
+                    right: 2px;
+                    height: 2px;
+                    background: #d83b01;
+                  "></div>
+                </div>
+              </div>
+              <span style="font-size: 14px; color: #ffffff;">Personalization</span>
+            </div>
+
+            <div style="
+              padding: 12px 20px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              transition: background-color 0.1s;
+            " onmouseover="this.style.background='#2c2c2c'" onmouseout="this.style.background='transparent'">
+              <div style="
+                width: 20px;
+                height: 20px;
+                background: #881798;
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div style="
+                  width: 10px;
+                  height: 10px;
+                  border: 2px solid white;
+                  border-radius: 50%;
+                  position: relative;
+                ">
+                  <div style="
+                    position: absolute;
+                    top: 2px;
+                    left: 2px;
+                    width: 2px;
+                    height: 2px;
+                    background: white;
+                    border-radius: 50%;
+                  "></div>
+                </div>
+              </div>
+              <span style="font-size: 14px; color: #ffffff;">Apps</span>
+            </div>
+
+            <div style="
+              padding: 12px 20px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              transition: background-color 0.1s;
+            " onmouseover="this.style.background='#2c2c2c'" onmouseout="this.style.background='transparent'">
+              <div style="
+                width: 20px;
+                height: 20px;
+                background: #498205;
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div style="
+                  width: 8px;
+                  height: 12px;
+                  background: white;
+                  border-radius: 1px;
+                  position: relative;
+                ">
+                  <div style="
+                    position: absolute;
+                    top: 2px;
+                    left: 1px;
+                    right: 1px;
+                    height: 1px;
+                    background: #498205;
+                  "></div>
+                  <div style="
+                    position: absolute;
+                    top: 4px;
+                    left: 1px;
+                    right: 1px;
+                    height: 1px;
+                    background: #498205;
+                  "></div>
+                </div>
+              </div>
+              <span style="font-size: 14px; color: #ffffff;">Accounts</span>
+            </div>
+
+            <div style="
+              padding: 12px 20px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              transition: background-color 0.1s;
+            " onmouseover="this.style.background='#2c2c2c'" onmouseout="this.style.background='transparent'">
+              <div style="
+                width: 20px;
+                height: 20px;
+                background: #b146c2;
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div style="
+                  width: 12px;
+                  height: 8px;
+                  background: white;
+                  border-radius: 1px;
+                  position: relative;
+                ">
+                  <div style="
+                    position: absolute;
+                    top: -2px;
+                    left: 2px;
+                    right: 2px;
+                    height: 4px;
+                    background: white;
+                    border-radius: 2px 2px 0 0;
+                  "></div>
+                </div>
+              </div>
+              <span style="font-size: 14px; color: #ffffff;">Time & language</span>
+            </div>
+
+            <div style="
+              padding: 12px 20px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              transition: background-color 0.1s;
+            " onmouseover="this.style.background='#2c2c2c'" onmouseout="this.style.background='transparent'">
+              <div style="
+                width: 20px;
+                height: 20px;
+                background: #00188f;
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div style="
+                  width: 10px;
+                  height: 10px;
+                  border: 2px solid white;
+                  border-radius: 50%;
+                  background: #00188f;
+                  position: relative;
+                ">
+                  <div style="
+                    position: absolute;
+                    top: 1px;
+                    left: 1px;
+                    width: 2px;
+                    height: 2px;
+                    background: white;
+                    border-radius: 50%;
+                  "></div>
+                </div>
+              </div>
+              <span style="font-size: 14px; color: #ffffff;">Gaming</span>
+            </div>
+
+            <div style="
+              padding: 12px 20px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              transition: background-color 0.1s;
+            " onmouseover="this.style.background='#2c2c2c'" onmouseout="this.style.background='transparent'">
+              <div style="
+                width: 20px;
+                height: 20px;
+                background: #767676;
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div style="
+                  width: 12px;
+                  height: 12px;
+                  background: white;
+                  border-radius: 1px;
+                  position: relative;
+                ">
+                  <div style="
+                    position: absolute;
+                    top: 2px;
+                    left: 2px;
+                    width: 8px;
+                    height: 1px;
+                    background: #767676;
+                  "></div>
+                  <div style="
+                    position: absolute;
+                    top: 5px;
+                    left: 2px;
+                    width: 6px;
+                    height: 1px;
+                    background: #767676;
+                  "></div>
+                  <div style="
+                    position: absolute;
+                    top: 8px;
+                    left: 2px;
+                    width: 4px;
+                    height: 1px;
+                    background: #767676;
+                  "></div>
+                </div>
+              </div>
+              <span style="font-size: 14px; color: #ffffff;">Accessibility</span>
+            </div>
+
+            <div style="
+              padding: 12px 20px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              transition: background-color 0.1s;
+            " onmouseover="this.style.background='#2c2c2c'" onmouseout="this.style.background='transparent'">
+              <div style="
+                width: 20px;
+                height: 20px;
+                background: #ca5010;
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div style="
+                  width: 12px;
+                  height: 12px;
+                  background: white;
+                  border-radius: 1px;
+                  position: relative;
+                ">
+                  <div style="
+                    position: absolute;
+                    top: 2px;
+                    left: 2px;
+                    width: 2px;
+                    height: 8px;
+                    background: #ca5010;
+                  "></div>
+                  <div style="
+                    position: absolute;
+                    top: 4px;
+                    left: 5px;
+                    width: 5px;
+                    height: 1px;
+                    background: #ca5010;
+                  "></div>
+                  <div style="
+                    position: absolute;
+                    top: 7px;
+                    left: 5px;
+                    width: 3px;
+                    height: 1px;
+                    background: #ca5010;
+                  "></div>
+                </div>
+              </div>
+              <span style="font-size: 14px; color: #ffffff;">Privacy & security</span>
+            </div>
+
+            <div style="
+              padding: 12px 20px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              transition: background-color 0.1s;
+            " onmouseover="this.style.background='#2c2c2c'" onmouseout="this.style.background='transparent'">
+              <div style="
+                width: 20px;
+                height: 20px;
+                background: #0078d4;
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              ">
+                <div style="
+                  width: 10px;
+                  height: 10px;
+                  border: 2px solid white;
+                  border-radius: 2px;
+                  position: relative;
+                ">
+                  <div style="
+                    position: absolute;
+                    top: 2px;
+                    left: 2px;
+                    width: 2px;
+                    height: 2px;
+                    background: white;
+                  "></div>
+                </div>
+              </div>
+              <span style="font-size: 14px; color: #ffffff;">Windows Update</span>
+            </div>
+          </div>
+        </div>
+
+        
+        <div style="
+          flex: 1;
+          background: #2c2c2c;
+          overflow-y: auto;
+          padding: 32px 40px;
+        ">
+          <div style="max-width: 800px;">
+            <h2 style="
+              font-size: 32px;
+              font-weight: 600;
+              margin: 0 0 8px 0;
+              color: #ffffff;
+            ">System</h2>
+            <p style="
+              font-size: 14px;
+              color: #cccccc;
+              margin: 0 0 32px 0;
+            ">Display, sound, notifications, power</p>
+
+            
+            <div style="display: flex; flex-direction: column; gap: 1px; widht: 90vw">
+              
+              <div style="
+                background: #1e1e1e;
+                border: 1px solid #404040;
+                border-radius: 8px;
+                padding: 20px;
+                cursor: pointer;
+                transition: all 0.1s;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              " onmouseover="this.style.background='#353535'; this.style.borderColor='#505050'" onmouseout="this.style.background='#1e1e1e'; this.style.borderColor='#404040'">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <div style="
+                    width: 32px;
+                    height: 32px;
+                    background: #0078d4;
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  ">
+                    <div style="
+                      width: 18px;
+                      height: 12px;
+                      border: 2px solid white;
+                      border-radius: 2px;
+                      position: relative;
+                    ">
+                      <div style="
+                        position: absolute;
+                        bottom: -1px;
+                        left: 6px;
+                        right: 6px;
+                        height: 3px;
+                        background: white;
+                        border-radius: 0 0 1px 1px;
+                      "></div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 style="
+                      font-size: 16px;
+                      font-weight: 500;
+                      margin: 0 0 4px 0;
+                      color: #ffffff;
+                    ">Display</h3>
+                    <p style="
+                      font-size: 14px;
+                      color: #cccccc;
+                      margin: 0;
+                    ">Monitors, brightness, night light, display profile</p>
+                  </div>
+                </div>
+                <div style="
+                  color: #cccccc;
+                  font-size: 12px;
+                  transform: rotate(-90deg);
+                ">❮</div>
+              </div>
+
+
+              <div style="
+                background: #1e1e1e;
+                border: 1px solid #404040;
+                border-radius: 8px;
+                padding: 20px;
+                cursor: pointer;
+                transition: all 0.1s;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 8px;
+              " onmouseover="this.style.background='#353535'; this.style.borderColor='#505050'" onmouseout="this.style.background='#1e1e1e'; this.style.borderColor='#404040'">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <div style="
+                    width: 32px;
+                    height: 32px;
+                    background: #107c10;
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  ">
+                    <div style="
+                      width: 4px;
+                      height: 16px;
+                      background: white;
+                      border-radius: 2px;
+                      position: relative;
+                    ">
+                      <div style="
+                        position: absolute;
+                        right: -6px;
+                        top: 2px;
+                        width: 8px;
+                        height: 8px;
+                        border: 2px solid white;
+                        border-left: none;
+                        border-radius: 0 4px 4px 0;
+                      "></div>
+                      <div style="
+                        position: absolute;
+                        right: -12px;
+                        top: 4px;
+                        width: 6px;
+                        height: 4px;
+                        border: 1px solid white;
+                        border-left: none;
+                        border-radius: 0 2px 2px 0;
+                      "></div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 style="
+                      font-size: 16px;
+                      font-weight: 500;
+                      margin: 0 0 4px 0;
+                      color: #ffffff;
+                    ">Sound</h3>
+                    <p style="
+                      font-size: 14px;
+                      color: #cccccc;
+                      margin: 0;
+                    ">Volume levels, output, input, sound devices</p>
+                  </div>
+                </div>
+                <div style="
+                  color: #cccccc;
+                  font-size: 12px;
+                  transform: rotate(-90deg);
+                ">❮</div>
+              </div>
+
+
+              <div style="
+                background: #1e1e1e;
+                border: 1px solid #404040;
+                border-radius: 8px;
+                padding: 20px;
+                cursor: pointer;
+                transition: all 0.1s;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 8px;
+              " onmouseover="this.style.background='#353535'; this.style.borderColor='#505050'" onmouseout="this.style.background='#1e1e1e'; this.style.borderColor='#404040'">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <div style="
+                    width: 32px;
+                    height: 32px;
+                    background: #ff8c00;
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  ">
+                    <div style="
+                      width: 16px;
+                      height: 12px;
+                      background: white;
+                      border-radius: 2px;
+                      position: relative;
+                    ">
+                      <div style="
+                        position: absolute;
+                        top: 2px;
+                        left: 2px;
+                        right: 2px;
+                        height: 1px;
+                        background: #ff8c00;
+                      "></div>
+                      <div style="
+                        position: absolute;
+                        top: 5px;
+                        left: 2px;
+                        right: 2px;
+                        height: 1px;
+                        background: #ff8c00;
+                      "></div>
+                      <div style="
+                        position: absolute;
+                        top: 8px;
+                        left: 2px;
+                        right: 8px;
+                        height: 1px;
+                        background: #ff8c00;
+                      "></div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 style="
+                      font-size: 16px;
+                      font-weight: 500;
+                      margin: 0 0 4px 0;
+                      color: #ffffff;
+                    ">Notifications</h3>
+                    <p style="
+                      font-size: 14px;
+                      color: #cccccc;
+                      margin: 0;
+                    ">Alerts from apps and system</p>
+                  </div>
+                </div>
+                <div style="
+                  color: #cccccc;
+                  font-size: 12px;
+                  transform: rotate(-90deg);
+                ">❮</div>
+              </div>
+
+
+              <div style="
+                background: #1e1e1e;
+                border: 1px solid #404040;
+                border-radius: 8px;
+                padding: 20px;
+                cursor: pointer;
+                transition: all 0.1s;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 8px;
+              " onmouseover="this.style.background='#353535'; this.style.borderColor='#505050'" onmouseout="this.style.background='#1e1e1e'; this.style.borderColor='#404040'">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <div style="
+                    width: 32px;
+                    height: 32px;
+                    background: #107c10;
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  ">
+                    <div style="
+                      width: 16px;
+                      height: 10px;
+                      border: 2px solid white;
+                      border-radius: 2px;
+                      position: relative;
+                      background: white;
+                    ">
+                      <div style="
+                        position: absolute;
+                        right: -3px;
+                        top: 2px;
+                        width: 2px;
+                        height: 4px;
+                        background: white;
+                        border-radius: 0 1px 1px 0;
+                      "></div>
+                      <div style="
+                        position: absolute;
+                        top: 1px;
+                        left: 1px;
+                        width: 8px;
+                        height: 6px;
+                        background: #107c10;
+                        border-radius: 1px;
+                      "></div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 style="
+                      font-size: 16px;
+                      font-weight: 500;
+                      margin: 0 0 4px 0;
+                      color: #ffffff;
+                    ">Power & battery</h3>
+                    <p style="
+                      font-size: 14px;
+                      color: #cccccc;
+                      margin: 0;
+                    ">Sleep, power mode, battery usage</p>
+                  </div>
+                </div>
+                <div style="
+                  color: #cccccc;
+                  font-size: 12px;
+                  transform: rotate(-90deg);
+                ">❮</div>
+              </div>
+
+
+              <div style="
+                background: #1e1e1e;
+                border: 1px solid #404040;
+                border-radius: 8px;
+                padding: 20px;
+                cursor: pointer;
+                transition: all 0.1s;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-top: 8px;
+              " onmouseover="this.style.background='#353535'; this.style.borderColor='#505050'" onmouseout="this.style.background='#1e1e1e'; this.style.borderColor='#404040'">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                  <div style="
+                    width: 32px;
+                    height: 32px;
+                    background: #ca5010;
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  ">
+                    <div style="
+                      width: 16px;
+                      height: 16px;
+                      background: white;
+                      border-radius: 2px;
+                      position: relative;
+                    ">
+                      <div style="
+                        position: absolute;
+                        top: 3px;
+                        left: 3px;
+                        right: 3px;
+                        height: 2px;
+                        background: #ca5010;
+                        border-radius: 1px;
+                      "></div>
+                      <div style="
+                        position: absolute;
+                        bottom: 6px;
+                        left: 3px;
+                        right: 3px;
+                        height: 2px;
+                        background: #ca5010;
+                        border-radius: 1px;
+                      "></div>
+                      <div style="
+                        position: absolute;
+                        bottom: 3px;
+                        left: 3px;
+                        right: 3px;
+                        height: 2px;
+                        background: #ca5010;
+                        border-radius: 1px;
+                      "></div>
+                    </div>
+                  </div>
+                  <div>
+                    <h3 style="
+                      font-size: 16px;
+                      font-weight: 500;
+                      margin: 0 0 4px 0;
+                      color: #ffffff;
+                    ">Storage</h3>
+                    <p style="
+                      font-size: 14px;
+                      color: #cccccc;
+                      margin: 0;
+                    ">Storage spaces, drives, configuration rules</p>
+                  </div>
+                </div>
+                <div style="
+                  color: #cccccc;
+                  font-size: 12px;
+                  transform: rotate(-90deg);
+                ">❮</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+document.getElementById("display-settings").addEventListener("click", () => {
+  const win = createWindow("Settings", getSettings());
+});
+
+// Notepad Feature
+document.addEventListener("click", function (e) {
+  if (e.target.id === "save-notepad-btn") {
+    const text = document.getElementById("notepad-textarea")?.value || "";
+    const blob = new Blob([text], { type: "text/plain" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "untitled.txt";
+    a.click();
+  }
+});
+
+// Dropdown toggling
+document.addEventListener("click", (e) => {
+  const isMenu = e.target.closest(".menu-item");
+  document.querySelectorAll(".menu-dropdown").forEach((menu) => {
+    menu.style.display = "none";
+  });
+  if (isMenu) {
+    const dropdown = isMenu.querySelector(".menu-dropdown");
+    dropdown.style.display = "block";
+    e.stopPropagation();
+  }
+});
+
+// Save as .txt
+function notepadSave() {
+  const text = document.getElementById("notepad-textarea")?.value || "";
+  const blob = new Blob([text], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "untitled.txt";
+  a.click();
+}
+
+// New file (clear textarea)
+function notepadNew() {
+  if (confirm("Start a new document? Unsaved changes will be lost.")) {
+    document.getElementById("notepad-textarea").value = "";
+  }
+}
+
+// Open file from disk
+function notepadOpen() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".txt";
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      document.getElementById("notepad-textarea").value = reader.result;
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// Select all
+function notepadSelectAll() {
+  const textarea = document.getElementById("notepad-textarea");
+  textarea.select();
+}
+
+// Word wrap toggle
+function notepadToggleWrap() {
+  const ta = document.getElementById("notepad-textarea");
+  ta.style.whiteSpace = ta.style.whiteSpace === "pre" ? "pre-wrap" : "pre";
+}
+
+// Zoom
+let currentFontSize = 15;
+function notepadZoom(delta) {
+  if (delta === 0) currentFontSize = 15;
+  else currentFontSize += delta;
+  const ta = document.getElementById("notepad-textarea");
+  ta.style.fontSize = `${currentFontSize}px`;
+}
+
+// Menu style
+document.querySelectorAll(".menu-option").forEach((el) => {
+  el.style.padding = "6px 12px";
+  el.style.cursor = "pointer";
+  el.style.fontSize = "13px";
+  el.addEventListener("mouseover", () => (el.style.background = "#eee"));
+  el.addEventListener("mouseout", () => (el.style.background = "white"));
+});
+
+function notepadCut() {
+  const textarea = document.getElementById("notepad-textarea");
+  const selected = textarea.value.substring(
+    textarea.selectionStart,
+    textarea.selectionEnd
+  );
+  if (selected) {
+    navigator.clipboard.writeText(selected).then(() => {
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      textarea.value =
+        textarea.value.slice(0, start) + textarea.value.slice(end);
+      textarea.setSelectionRange(start, start);
+    });
+  }
+}
+
+function notepadCopy() {
+  const textarea = document.getElementById("notepad-textarea");
+  const selected = textarea.value.substring(
+    textarea.selectionStart,
+    textarea.selectionEnd
+  );
+  if (selected) {
+    navigator.clipboard.writeText(selected);
+  }
+}
+
+function notepadPaste() {
+  const textarea = document.getElementById("notepad-textarea");
+  navigator.clipboard.readText().then((clipText) => {
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const before = textarea.value.slice(0, start);
+    const after = textarea.value.slice(end);
+    textarea.value = before + clipText + after;
+    const cursor = start + clipText.length;
+    textarea.setSelectionRange(cursor, cursor);
+    textarea.focus();
+  });
+}
+
+function setupCommandPrompt() {
+  const output = document.getElementById("cmd-output");
+  const input = document.getElementById("cmd-input");
+
+  if (!output || !input) return;
+
+  input.focus();
+
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      const command = input.value.trim();
+      if (command) {
+        output.textContent += `\nC:\\Users\\You> ${command}\n`;
+        runCommand(command, output);
+        output.scrollTop = output.scrollHeight;
+      }
+      input.value = "";
+    }
+  });
+}
+
+function runCommand(command, outputElement) {
+  const lower = command.toLowerCase();
+
+  switch (true) {
+    case lower === "help":
+      outputElement.textContent += `Available commands:
+- help
+- clear
+- echo [message]
+- date
+- about
+`;
+      break;
+    case lower === "clear":
+      outputElement.textContent = `Microsoft Windows [Version 11.0.12345]
+(c) Microsoft Corporation. All rights reserved.
+
+Type "help" to view available commands.
+
+C:\\Users\\You>`;
+      break;
+    case lower === "date":
+      outputElement.textContent += `${new Date().toString()}\n`;
+      break;
+    case lower.startsWith("echo "):
+      outputElement.textContent += `${command.slice(5)}\n`;
+      break;
+    case lower === "about":
+      outputElement.textContent += `Simulated Windows CMD built with JavaScript.\n`;
+      break;
+    default:
+      outputElement.textContent += `'${command}' is not recognized as an internal or external command.\n`;
+  }
+}
+
+function runCommand(command, outputElement) {
+  const lowerCmd = command.toLowerCase();
+
+  if (lowerCmd === "help") {
+    outputElement.innerHTML += `Available commands:
+- help
+- clear
+- date
+- echo [message]
+- about
+\n`;
+  } else if (lowerCmd === "clear") {
+    outputElement.innerHTML = "";
+  } else if (lowerCmd === "date") {
+    outputElement.innerHTML += `${new Date().toString()}\n`;
+  } else if (lowerCmd.startsWith("echo ")) {
+    const message = command.slice(5);
+    outputElement.innerHTML += `${message}\n`;
+  } else if (lowerCmd === "about") {
+    outputElement.innerHTML += `This is a simulated Command Prompt built using JavaScript.\n`;
+  } else {
+    outputElement.innerHTML += `'${command}' is not recognized as an internal or external command.\n`;
+  }
+}
+
+setTimeout(setupCommandPrompt, 100);
